@@ -10,7 +10,7 @@ export const GET = async ({ params }) => {
 		console.log(url);
 
 		const qrCode = await QRCode.toBuffer(url, {
-			width: 150,
+			width: 100,
 			margin: 1,
 			color: {
 				light: '#ffffff',

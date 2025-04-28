@@ -32,7 +32,7 @@
 				<div>
 					<h3 class="text-sm font-medium text-gray-900">
 						{#if item.href}
-							<a href="#" class="focus:outline-hidden">
+							<a href={item.href} class="focus:outline-hidden">
 								{#if !item.disabled}
 									<span class="absolute inset-0" aria-hidden="true"></span>
 								{/if}

@@ -1,5 +1,7 @@
 <script>
+	import { browser } from '$app/environment';
 	import ECard from '$lib/ECard/ECard.svelte';
+	import { onMount } from 'svelte';
 
 	const components = [
 		{
@@ -23,6 +25,12 @@
 			order: 2
 		}
 	];
+
+	onMount(() => {
+		if (browser) {
+			window.print();
+		}
+	});
 </script>
 
 <div

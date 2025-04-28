@@ -1,6 +1,8 @@
 <script>
 	import StartingPointList from '$lib/Components/StartingPointList.svelte';
 	import Container from '$lib/Container.svelte';
+
+	const eCardID = 'ECARD-M9XEDZ2D-0MX1';
 </script>
 
 <Container>
@@ -44,7 +46,8 @@
 				{
 					title: 'Print ECard',
 					description: 'Make it not an ECard',
-					onClick: () => alert('Clicked'),
+					// onClick: () => alert('Clicked'),
+					href: `/my-ecards/${eCardID}/print`,
 					icon: print,
 					bgColor: 'bg-indigo-500'
 				}

@@ -21,6 +21,8 @@
 		<button class="btn btn-custom print:hidden">Add To My Calender</button>
 	</div>
 	{#if browser}
-		<img src={`${window.location.href}/qr`} alt="QR COde" />
+		<div>
+			<img src={`${window.location.href}/qr`} alt="QR COde" class="hidden print:block h-auto" />
+		</div>
 	{/if}
 </div>
