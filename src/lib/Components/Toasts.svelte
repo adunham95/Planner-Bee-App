@@ -14,8 +14,6 @@
 		unsubscribe();
 	});
 
-	$inspect(toasts);
-
 	function getStyle(style: 'success' | 'error' | 'info' | 'warning' | undefined) {
 		if (style === 'error') return 'border-error-400';
 		if (style === 'success') return 'border-success-400';
