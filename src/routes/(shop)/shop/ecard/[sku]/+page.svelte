@@ -17,7 +17,7 @@
 	let options: { [key: string]: string } = $state({});
 
 	$effect(() => {
-		data?.product?.components.forEach((comp) => {
+		(data?.product?.components || []).forEach((comp) => {
 			if (comp.key) {
 				options[comp.key] = comp.default || '';
 			}
