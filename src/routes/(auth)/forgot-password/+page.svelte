@@ -1,8 +1,35 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+	import { PUBLIC_API_URL } from '$env/static/public';
+
 	let email = $state('');
 
 	async function resetPassword(e: SubmitEvent) {
 		e.preventDefault();
+		const url = `${PUBLIC_API_URL}/auth/request-reset`;
+
+		try {
+			const res = await fetch(url, {
+				method: 'POST',
+				credentials: 'include',
+				headers: {
+					'Content-Type': 'application/json' // Set content type to JSON
+				},
+				body: JSON.stringify({
+					email
+				})
+			});
+			if (res.ok) {
+				const data = await res.json();
+				console.log(data);
+				await goto('/');
+			} else {
+				const data = await res.json();
+				console.log(res, data);
+			}
+		} catch (error) {
+			console.error('There was a problem with the fetch operation:', error);
+		}
 	}
 </script>
 
