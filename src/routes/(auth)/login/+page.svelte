@@ -1,14 +1,16 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { PUBLIC_API_URL } from '$env/static/public';
-	import type { FormEventHandler } from 'svelte/elements';
 
 	let email = $state('');
 	let password = $state('');
 	let isLoading = $state(false);
+	let isError = $state(false);
 
 	async function login(e: SubmitEvent) {
 		e.preventDefault();
 		isLoading = true;
+		isError = false;
 		const url = `${PUBLIC_API_URL}/auth/login`;
 
 		try {
@@ -26,6 +28,12 @@
 			if (res.ok) {
 				const data = await res.json();
 				console.log(data);
+				await goto('/');
+				isLoading = false;
+			} else {
+				const data = await res.json();
+				console.log(res, data);
+				isError = true;
 				isLoading = false;
 			}
 		} catch (error) {
@@ -37,6 +45,11 @@
 
 <form class="space-y-6" onsubmit={login}>
 	<h2 class="mt-6 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Login</h2>
+	{#if isError}
+		<div>
+			<p class="text-error-500 font-semibold">There was an error logging in</p>
+		</div>
+	{/if}
 	<div>
 		<label for="email" class="block text-sm/6 font-medium text-gray-900">Email address</label>
 		<div class="mt-2">
@@ -73,10 +86,11 @@
 				Create Account
 			</a>
 		</div>
-
-		<!-- <div class="text-sm/6">
-			<a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500">Forgot password?</a>
-		</div> -->
+		<div class="text-sm/6">
+			<a href="/forgot-password" class="font-semibold text-indigo-600 hover:text-indigo-500">
+				Forgot Password
+			</a>
+		</div>
 	</div>
 
 	<div>

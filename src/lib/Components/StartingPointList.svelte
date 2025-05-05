@@ -36,7 +36,7 @@
 								{#if !item.disabled}
 									<span class="absolute inset-0" aria-hidden="true"></span>
 								{/if}
-								<span>View ECard</span>
+								<span>{item.title}</span>
 								<span aria-hidden="true"> &rarr;</span>
 							</a>
 						{:else if item.onClick}

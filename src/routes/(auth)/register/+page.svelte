@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { PUBLIC_API_URL } from '$env/static/public';
 
 	let email = $state('');
@@ -26,7 +27,11 @@
 			if (res.ok) {
 				const data = await res.json();
 				console.log(data);
+				await goto('/login');
 				isLoading = false;
+			} else {
+				const data = await res.json();
+				console.log(data);
 			}
 		} catch (error) {
 			console.error('There was a problem with the fetch operation:', error);
@@ -37,7 +42,7 @@
 
 <form class="space-y-6" onsubmit={login}>
 	<h2 class="mt-6 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-		Sign in to your account
+		Create your account
 	</h2>
 	<div>
 		<label for="name" class="block text-sm/6 font-medium text-gray-900">Full Name</label>
@@ -73,11 +78,11 @@
 		<label for="password" class="block text-sm/6 font-medium text-gray-900">Password</label>
 		<div class="mt-2">
 			<input
-				type="password"
+				type="text"
 				name="password"
 				id="password"
 				bind:value={password}
-				autocomplete="current-password"
+				autocomplete="new-password"
 				required
 				class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
 			/>

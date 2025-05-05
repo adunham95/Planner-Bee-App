@@ -26,7 +26,7 @@
 				{
 					title: 'View ECard',
 					description: 'View the ecard',
-					onClick: () => alert('Clicked'),
+					href: `/ecard/${eCardID}`,
 					icon: ecard
 				},
 				{
