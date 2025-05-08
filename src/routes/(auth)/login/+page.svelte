@@ -1,16 +1,15 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { PUBLIC_API_URL } from '$env/static/public';
+	import { toastStore } from '$lib/stores/toast';
 
 	let email = $state('');
 	let password = $state('');
 	let isLoading = $state(false);
-	let isError = $state(false);
 
 	async function login(e: SubmitEvent) {
 		e.preventDefault();
 		isLoading = true;
-		isError = false;
 		const url = `${PUBLIC_API_URL}/auth/login`;
 
 		try {
@@ -26,17 +25,19 @@
 				})
 			});
 			if (res.ok) {
+				toastStore.show({ message: 'Successfully logged in', type: 'success' });
 				const data = await res.json();
 				console.log(data);
-				await goto('/');
+				await goto('/account');
 				isLoading = false;
 			} else {
 				const data = await res.json();
 				console.log(res, data);
-				isError = true;
+				toastStore.show({ message: 'Error logging in', type: 'error' });
 				isLoading = false;
 			}
 		} catch (error) {
+			toastStore.show({ message: 'Error logging in', type: 'error' });
 			console.error('There was a problem with the fetch operation:', error);
 			isLoading = false;
 		}
@@ -45,11 +46,6 @@
 
 <form class="space-y-6" onsubmit={login}>
 	<h2 class="mt-6 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Login</h2>
-	{#if isError}
-		<div>
-			<p class="text-error-500 font-semibold">There was an error logging in</p>
-		</div>
-	{/if}
 	<div>
 		<label for="email" class="block text-sm/6 font-medium text-gray-900">Email address</label>
 		<div class="mt-2">
@@ -95,6 +91,7 @@
 
 	<div>
 		<button
+			disabled={isLoading}
 			type="submit"
 			class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
 			>Sign in</button
