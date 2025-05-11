@@ -19,6 +19,19 @@
 			}
 		}
 	}
+
+	.btn-outline {
+		background-color: transparent;
+		border: 2px solid;
+		border-color: var(--color-primary-500);
+		color: var(--color-primary-500);
+		&:hover {
+			@media (hover: hover) {
+				background-color: var(--color-primary-200);
+			}
+		}
+	}
+
 	.btn-small {
 		padding-block: --spacing(1);
 		font-size: var(--text-sm);

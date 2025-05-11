@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { PUBLIC_API_URL } from '$env/static/public';
-	import Calender from '$lib/Calender/Calender.svelte';
 	import Divider from '$lib/Components/Divider.svelte';
 	import Loader from '$lib/Components/Loader.svelte';
 	import SectionTitle from '$lib/Components/SectionTitle.svelte';
@@ -8,7 +7,8 @@
 	import SidebarSection from '$lib/Display/SidebarSection.svelte';
 	import ECard from '$lib/ECard/ECard.svelte';
 	import EditElements from '$lib/ECard/EditElements.svelte';
-	import Label from '$lib/FormElements/Label.svelte';
+	import TextInput from '$lib/FormElements/TextInput.svelte';
+	import { toastStore } from '$lib/stores/toast.js';
 
 	let { data } = $props();
 
@@ -36,6 +36,7 @@
 		try {
 			const res = await fetch(`${PUBLIC_API_URL}/ecards`, {
 				method: 'POST',
+				credentials: 'include', // this is critical
 				headers: {
 					'Content-Type': 'application/json' // Set content type to JSON
 				},
@@ -45,14 +46,24 @@
 					options: cardOptions
 				})
 			});
+			const responseData = await res.json();
 			if (res.ok) {
-				const data = await res.json();
-				console.log(data);
+				console.log(responseData);
+				isLoading = false;
+				toastStore.show({ message: 'Card Created', type: 'success' });
+			} else {
+				console.log(responseData);
+				toastStore.show({
+					message: 'There was an error',
+					type: 'error',
+					details: responseData.message
+				});
 				isLoading = false;
 			}
 		} catch (error) {
 			console.error('There was a problem with the fetch operation:', error);
 			isLoading = false;
+			toastStore.show({ message: 'There was an error', type: 'error' });
 		}
 	}
 </script>
@@ -84,7 +95,19 @@
 					<Calender />
 				</div> -->
 				<Divider />
-				<button class="btn" onclick={saveECard}>Send ECard</button>
+				<SectionTitle title="Sender" />
+				<TextInput id="senderName" label="Sender Name" value={data.profile.name} />
+				<TextInput
+					id="email"
+					label="Sender Email"
+					subLabel="Helps us assign this to your account if you create one"
+					value={data.profile.email}
+				/>
+				<Divider />
+				<div class="flex gap-2">
+					<button class="btn btn-outline" onclick={saveECard}>Send without Customization</button>
+					<button class="btn" onclick={saveECard}>Send ECard</button>
+				</div>
 				{#if isLoading}
 					<div class="absolute inset-0 flex justify-center items-center">
 						<Loader />

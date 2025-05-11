@@ -25,6 +25,17 @@ interface FeaturedProduct {
 	updatedAt: Date;
 }
 
+interface ECard {
+	deliveryDate?: string;
+	eCardNumber: string;
+	eCardTemplateSku: string;
+	id: string;
+	senderEmail?: string;
+	senderID?: number;
+	status: string;
+	eCardTemplate: ECardTemplate;
+}
+
 interface ECardTemplate {
 	id?: string;
 	sku: string;
@@ -55,4 +66,4 @@ interface ECardComponent {
 	order: number;
 }
 
-export { Categories, ECardTemplate, ECardComponent, FeaturedProduct };
+export { Categories, ECardTemplate, ECardComponent, FeaturedProduct, ECard };

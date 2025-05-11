@@ -14,6 +14,7 @@
 		id,
 		label,
 		hideLabel,
+		subLabel,
 		className = '',
 		inputClassName,
 		labelClassName,
@@ -26,7 +27,7 @@
 </script>
 
 <div class={`${className}`}>
-	<Label {id} {label} {hideLabel} {labelClassName} />
+	<Label {id} {label} {hideLabel} {labelClassName} {subLabel} />
 	<input
 		{id}
 		{type}

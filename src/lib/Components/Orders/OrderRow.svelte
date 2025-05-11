@@ -33,11 +33,7 @@
 							>
 								<circle cx="3" cy="3" r="3" />
 							</svg>
-							<span
-								class="inline-flex items-center rounded-md bg-success-100 px-2 py-1 text-xs font-medium text-success-600"
-							>
-								{status}
-							</span>
+							{@render chip(status)}
 						{/if}
 					</div>
 					<p class="mt-2 hidden text-sm text-gray-500 sm:block">
@@ -65,3 +61,13 @@
 		<a href={`/my-ecards/${cardNumber}`} class="text-primary-600 hover:text-primary-500">Details</a>
 	</div>
 </div>
+
+{#snippet chip(status: string)}
+	{#if status === 'draft'}
+		<span
+			class="inline-flex items-center rounded-md bg-info-100 px-2 py-1 text-xs font-medium text-info-600"
+		>
+			Draft
+		</span>
+	{/if}
+{/snippet}
