@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { formatCurrency } from '$lib/util/formatCurrency';
 	import type { ECardTemplate } from '../../app';
 
 	interface Props {
@@ -10,33 +11,31 @@
 </script>
 
 <div class="inline-flex flex-col text-center lg:w-auto">
-	<div class="group relative">
+	<a href={href || '#'} class="group relative">
 		<img
 			src={template.imageURL ||
 				'https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-02-product-01.jpg'}
 			alt="Black machined steel pen with hexagonal grip and small white logo at top."
 			class="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75"
 		/>
-		<div class="mt-6">
-			<h3 class="mt-1 font-semibold text-gray-900">
-				<a href={href || '#'}>
-					<span class="absolute inset-0"></span>
-					{template.name}
-				</a>
-			</h3>
-			{#if template.description || template.description !== ''}
-				<p class="text-sm text-gray-500">{template.description}</p>
-			{/if}
-			<ul role="list" class="mt-auto flex items-center justify-center space-x-3 pt-2">
-				{#each template.includedOptions as opt}
-					<li class="size-4 rounded-full">
-						<span class="sr-only">{opt}</span>
-						{@render optionIcon(opt)}
-					</li>
-				{/each}
-			</ul>
+		<div class="mt-4">
+			<div class=" flex items-center justify-between text-sm font-medium text-gray-900">
+				<h3>{template.name}</h3>
+				<p>{formatCurrency(template.cost)}</p>
+			</div>
+			<div class="flex items-center justify-start mt-1">
+				<p class="text-xs text-gray-500 italic pr-2 truncate">{template.description}</p>
+				<ul role="list" class=" flex items-center justify-center space-x-3">
+					{#each template.includedOptions as opt}
+						<li class="size-4 rounded-full">
+							<span class="sr-only">{opt}</span>
+							{@render optionIcon(opt)}
+						</li>
+					{/each}
+				</ul>
+			</div>
 		</div>
-	</div>
+	</a>
 </div>
 
 {#snippet optionIcon(iconName: string)}

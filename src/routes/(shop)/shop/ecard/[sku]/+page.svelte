@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { PUBLIC_API_URL } from '$env/static/public';
 	import Divider from '$lib/Components/Divider.svelte';
 	import Loader from '$lib/Components/Loader.svelte';
@@ -8,6 +9,7 @@
 	import ECard from '$lib/ECard/ECard.svelte';
 	import EditElements from '$lib/ECard/EditElements.svelte';
 	import TextInput from '$lib/FormElements/TextInput.svelte';
+	import { eCardCartStore } from '$lib/stores/eCardCheckout.js';
 	import { toastStore } from '$lib/stores/toast.js';
 
 	let { data } = $props();
@@ -27,44 +29,9 @@
 	$inspect(data);
 	$inspect(options);
 
-	async function saveECard() {
-		isLoading = true;
-		const cardOptions = Object.keys(options).map((key) => {
-			return { key, value: options[key] };
-		});
-		console.log(cardOptions);
-		try {
-			const res = await fetch(`${PUBLIC_API_URL}/ecards`, {
-				method: 'POST',
-				credentials: 'include', // this is critical
-				headers: {
-					'Content-Type': 'application/json' // Set content type to JSON
-				},
-				body: JSON.stringify({
-					senderEmail: '1@2.com',
-					eCardTemplateSku: data.product.sku,
-					options: cardOptions
-				})
-			});
-			const responseData = await res.json();
-			if (res.ok) {
-				console.log(responseData);
-				isLoading = false;
-				toastStore.show({ message: 'Card Created', type: 'success' });
-			} else {
-				console.log(responseData);
-				toastStore.show({
-					message: 'There was an error',
-					type: 'error',
-					details: responseData.message
-				});
-				isLoading = false;
-			}
-		} catch (error) {
-			console.error('There was a problem with the fetch operation:', error);
-			isLoading = false;
-			toastStore.show({ message: 'There was an error', type: 'error' });
-		}
+	function continueToSummary(isCustom?: boolean) {
+		eCardCartStore.initialize(data.product, options, isCustom);
+		goto('/shop/summary');
 	}
 </script>
 
@@ -95,7 +62,7 @@
 					<Calender />
 				</div> -->
 				<Divider />
-				<SectionTitle title="Sender" />
+				<!-- <SectionTitle title="Sender" />
 				<TextInput id="senderName" label="Sender Name" value={data.profile.name} />
 				<TextInput
 					id="email"
@@ -103,10 +70,12 @@
 					subLabel="Helps us assign this to your account if you create one"
 					value={data.profile.email}
 				/>
-				<Divider />
-				<div class="flex gap-2">
-					<button class="btn btn-outline" onclick={saveECard}>Send without Customization</button>
-					<button class="btn" onclick={saveECard}>Send ECard</button>
+				<Divider /> -->
+				<div class="flex gap-2 justify-end">
+					<button class="btn btn-outline" onclick={() => continueToSummary(false)}
+						>Continue without Customization</button
+					>
+					<button class="btn" onclick={() => continueToSummary(true)}>Continue</button>
 				</div>
 				{#if isLoading}
 					<div class="absolute inset-0 flex justify-center items-center">
