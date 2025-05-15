@@ -1,10 +1,13 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+	import { PUBLIC_API_URL } from '$env/static/public';
 	import Divider from '$lib/Components/Divider.svelte';
 	import SectionTitle from '$lib/Components/SectionTitle.svelte';
 	import Container from '$lib/Container.svelte';
 	import SidebarSection from '$lib/Display/SidebarSection.svelte';
 	import TextInput from '$lib/FormElements/TextInput.svelte';
 	import { eCardCartStore, getEcardOptions, type ECardCart } from '$lib/stores/eCardCheckout';
+	import { toastStore } from '$lib/stores/toast';
 	import { onDestroy } from 'svelte';
 
 	let eCardCheckout: ECardCart | undefined = $state();
@@ -21,40 +24,46 @@
 
 	async function sendECard() {
 		isLoading = true;
+		if (!eCardCheckout?.eCardTemplate) {
+			isLoading = false;
+			return toastStore.show({ type: 'error', message: 'There was an error saving your card' });
+		}
 		const cardOptions = getEcardOptions();
-		console.log(cardOptions);
-		// try {
-		// 	const res = await fetch(`${PUBLIC_API_URL}/ecards`, {
-		// 		method: 'POST',
-		// 		credentials: 'include', // this is critical
-		// 		headers: {
-		// 			'Content-Type': 'application/json' // Set content type to JSON
-		// 		},
-		// 		body: JSON.stringify({
-		// 			senderEmail: '1@2.com',
-		// 			eCardTemplateSku: data.product.sku,
-		// 			options: cardOptions
-		// 		})
-		// 	});
-		// 	const responseData = await res.json();
-		// 	if (res.ok) {
-		// 		console.log(responseData);
-		// 		isLoading = false;
-		// 		toastStore.show({ message: 'Card Created', type: 'success' });
-		// 	} else {
-		// 		console.log(responseData);
-		// 		toastStore.show({
-		// 			message: 'There was an error',
-		// 			type: 'error',
-		// 			details: responseData.message
-		// 		});
-		// 		isLoading = false;
-		// 	}
-		// } catch (error) {
-		// 	console.error('There was a problem with the fetch operation:', error);
-		// 	isLoading = false;
-		// 	toastStore.show({ message: 'There was an error', type: 'error' });
-		// }
+		try {
+			const res = await fetch(`${PUBLIC_API_URL}/ecards`, {
+				method: 'POST',
+				credentials: 'include', // this is critical
+				headers: {
+					'Content-Type': 'application/json' // Set content type to JSON
+				},
+				body: JSON.stringify({
+					senderEmail: eCardCheckout.sender.email,
+					eCardTemplateSku: eCardCheckout?.eCardTemplate?.sku,
+					options: cardOptions,
+					recipients: eCardCheckout.recipients
+				})
+			});
+			const responseData = await res.json();
+			if (res.ok) {
+				console.log(responseData);
+				isLoading = false;
+				toastStore.show({ message: 'Card Created', type: 'success' });
+				eCardCartStore.clearCart();
+				goto(`/my-ecards/${responseData.eCardNumber}`);
+			} else {
+				console.log(responseData);
+				toastStore.show({
+					message: 'There was an error',
+					type: 'error',
+					details: responseData.message
+				});
+				isLoading = false;
+			}
+		} catch (error) {
+			console.error('There was a problem with the fetch operation:', error);
+			isLoading = false;
+			toastStore.show({ message: 'There was an error', type: 'error' });
+		}
 	}
 </script>
 

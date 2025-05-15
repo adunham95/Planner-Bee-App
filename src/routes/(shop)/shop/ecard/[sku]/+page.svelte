@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { PUBLIC_API_URL } from '$env/static/public';
 	import Divider from '$lib/Components/Divider.svelte';
 	import Loader from '$lib/Components/Loader.svelte';
 	import SectionTitle from '$lib/Components/SectionTitle.svelte';
@@ -8,9 +7,7 @@
 	import SidebarSection from '$lib/Display/SidebarSection.svelte';
 	import ECard from '$lib/ECard/ECard.svelte';
 	import EditElements from '$lib/ECard/EditElements.svelte';
-	import TextInput from '$lib/FormElements/TextInput.svelte';
 	import { eCardCartStore } from '$lib/stores/eCardCheckout.js';
-	import { toastStore } from '$lib/stores/toast.js';
 
 	let { data } = $props();
 
@@ -56,25 +53,8 @@
 						bind:value={options[component.key]}
 					/>
 				{/each}
-				<!-- <Divider />
-				<SectionTitle title="Delivery Date" />
-				<div class="px-2">
-					<Calender />
-				</div> -->
 				<Divider />
-				<!-- <SectionTitle title="Sender" />
-				<TextInput id="senderName" label="Sender Name" value={data.profile.name} />
-				<TextInput
-					id="email"
-					label="Sender Email"
-					subLabel="Helps us assign this to your account if you create one"
-					value={data.profile.email}
-				/>
-				<Divider /> -->
 				<div class="flex gap-2 justify-end">
-					<button class="btn btn-outline" onclick={() => continueToSummary(false)}
-						>Continue without Customization</button
-					>
 					<button class="btn" onclick={() => continueToSummary(true)}>Continue</button>
 				</div>
 				{#if isLoading}
