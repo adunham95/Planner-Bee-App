@@ -1,5 +1,33 @@
 export const eCardComponents = [
 	{
+		id: 'title',
+		name: 'Title',
+		description: 'Display a title',
+		editComponentKey: 'text',
+		displayComponentKey: 'title'
+	},
+	{
+		id: 'message',
+		name: 'Message',
+		description: 'Write a custom message',
+		editComponentKey: 'textArea',
+		displayComponentKey: 'message'
+	},
+	{
+		id: 'banner',
+		name: 'Banner',
+		description: 'Add a banner image',
+		editComponentKey: 'text',
+		displayComponentKey: 'banner'
+	},
+	{
+		id: 'event',
+		name: 'Event',
+		description: 'Add basic event details',
+		editComponentKey: 'event',
+		displayComponentKey: 'event'
+	},
+	{
 		id: 'color-list',
 		name: 'Color List',
 		description: 'Pick a color',
@@ -43,33 +71,5 @@ export const eCardComponents = [
 		description: 'Pick a color',
 		editComponentKey: 'colorInput',
 		displayComponentKey: 'color'
-	},
-	{
-		id: 'title',
-		name: 'Title',
-		description: 'Display a title',
-		editComponentKey: 'text',
-		displayComponentKey: 'title'
-	},
-	{
-		id: 'message',
-		name: 'Message',
-		description: 'Write a custom message',
-		editComponentKey: 'textArea',
-		displayComponentKey: 'message'
-	},
-	{
-		id: 'banner',
-		name: 'Banner',
-		description: 'Add a banner image',
-		editComponentKey: 'text',
-		displayComponentKey: 'banner'
-	},
-	{
-		id: 'event',
-		name: 'Event',
-		description: 'Add basic event details',
-		editComponentKey: 'event',
-		displayComponentKey: 'event'
 	}
 ];

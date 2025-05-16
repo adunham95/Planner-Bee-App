@@ -12,7 +12,8 @@
 			sku: '',
 			description: '',
 			visible: true,
-			premium: false
+			premium: false,
+			cost: 0
 		})
 	}: {
 		onSave: () => void;
@@ -23,6 +24,7 @@
 			description: string;
 			visible: boolean;
 			premium: boolean;
+			cost: number;
 		};
 	} = $props();
 
@@ -33,6 +35,7 @@
 	<TextInput id="name" label="Name" bind:value={data.name} />
 	<TextInput id="imageURL" label="Image Path" bind:value={data.imageURL} />
 	<TextInput id="sku" label="SKU" bind:value={data.sku} />
+	<TextInput id="price" label="Price" bind:value={data.cost} />
 	<div class="flex py-1 justify-between">
 		<Toggle id="visible" label="Visible" bind:checked={data.visible} />
 		<Toggle id="premium" label="Premium" bind:checked={data.premium} />
