@@ -135,6 +135,20 @@
 
 	/* Custom */
 	--color-custom: oklch(65.111% 0.13954 277.64);
+
+	/* Pastel Color */
+	--color-pastel-pink: #f8c8dc;
+	--color-pastel-blue: #a8d0e6;
+	--color-pastel-green: #b0eacd;
+	--color-pastel-purple: #cdb4db;
+	--color-pastel-yellow: #fef3bd;
+	--color-pastel-orange: #ffd6a5;
+	--color-pastel-mint: #c0fdfb;
+	--color-pastel-lavender: #e6e6fa;
+	--color-pastel-peach: #ffcab1;
+	--color-pastel-teal: #a0e7e5;
+	--color-pastel-lilac: #e0bbec;
+	--color-pastel-sky: #caf0f8;
 }
 
 @utility markdown {
