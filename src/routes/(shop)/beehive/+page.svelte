@@ -1,10 +1,5 @@
 <script lang="ts">
-	const features = [
-		'Advanced Editing Tools',
-		'Premium Template Collection',
-		'Automated Sending',
-		'Lifetime Access to Updates'
-	];
+	import { formatCurrency } from '$lib/util/formatCurrency';
 </script>
 
 <div class="bg-white py-24 sm:py-32">
@@ -20,75 +15,73 @@
 				need to create beautiful, personalized, and automated events without the hassle.
 			</p>
 		</div>
-		<div
-			class="mx-auto mt-16 max-w-2xl rounded-3xl ring-1 ring-gray-200 sm:mt-20 lg:mx-0 lg:flex lg:max-w-none"
-		>
-			<div class="p-8 sm:p-10 lg:flex-auto">
-				<h3 class="text-3xl font-semibold tracking-tight text-gray-900">BeeHive Membership</h3>
-				<p class="mt-6 text-base/7 text-gray-600">
-					Take your planning to the next level with access to exclusive tools and features designed
-					to save you time and make your creations shine.
-				</p>
-				<div class="mt-10 flex items-center gap-x-4">
-					<h4 class="flex-none text-sAdvanced Editing Toolsm/6 font-semibold text-indigo-600">
-						What’s included
-					</h4>
-					<div class="h-px flex-auto bg-gray-100"></div>
-				</div>
-				<ul
-					role="list"
-					class="mt-8 grid grid-cols-1 gap-4 text-sm/6 text-gray-600 sm:grid-cols-2 sm:gap-6"
-				>
-					{#each features as feature}
-						<li class="flex gap-x-3">
-							<svg
-								class="h-6 w-5 flex-none text-indigo-600"
-								viewBox="0 0 20 20"
-								fill="currentColor"
-								aria-hidden="true"
-								data-slot="icon"
-							>
-								<path
-									fill-rule="evenodd"
-									d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
-									clip-rule="evenodd"
-								/>
-							</svg>
-							{feature}
-						</li>
-					{/each}
-				</ul>
-			</div>
-			<div class="-mt-2 p-2 lg:mt-0 lg:w-full lg:max-w-md lg:shrink-0">
-				<div
-					class="rounded-2xl bg-transparent py-10 text-center ring-1 ring-gray-900/5 ring-inset lg:flex lg:flex-col lg:justify-center lg:py-16 relative overflow-hidden h-full"
-				>
-					<div class="absolute inset-0">
-						<img
-							src="/images/pexels-sn-che-3918651-12391587.jpg"
-							alt=""
-							class="size-full object-cover opacity-25"
-						/>
-					</div>
-					<div class="mx-auto max-w-xs px-8 relative">
-						<div class="mt-6 flex items-center justify-start gap-x-4 font-semibold">
-							<p class="text-5xl tracking-tight text-gray-500">$9.99</p>
-							<div class="text-sm text-start">
-								<p class="text-gray-600">USD</p>
-								<p class="text-gray-600">Billed monthly</p>
-							</div>
-						</div>
-						<a
-							href="#"
-							class="mt-10 block w-full rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-							>Get access</a
-						>
-						<!-- <p class="mt-6 text-xs/5 text-gray-600">
-							Invoices and receipts available for easy company reimbursement
-						</p> -->
-					</div>
-				</div>
+		<div class="py-4 space-y-3 mx-auto max-w-10xl">
+			<div class="w-full grid grid-cols-1 gap-8 lg:grid-cols-3">
+				{@render subscriptionCard(
+					'WorkerBee Member',
+					'Free plan to get you onboard buzzing around',
+					['Paid ECards', 'Whole Catalog Access'],
+					0
+				)}
+				{@render subscriptionCard(
+					'BumbleBee Member',
+					'Take your planning to the next level with access to exclusive tools and features designed to save you time and make your creations shine.',
+					['Set and Send', 'Unlimited ECards'],
+					499
+				)}
+				{@render subscriptionCard(
+					'VIBee Member',
+					'Take your planning to the next level with access to exclusive tools and features designed to save you time and make your creations shine.',
+					['Advanced Editing Tools', 'Custom ECard Templates'],
+					999
+				)}
 			</div>
 		</div>
 	</div>
 </div>
+
+{#snippet subscriptionCard(name: string, description: string, features: string[], cost: number)}
+	<div
+		class="flex flex-col justify-between rounded-3xl bg-white p-8 shadow-xl ring-1 ring-gray-900/10 sm:p-10"
+	>
+		<div>
+			<h3 id="tier-hobby" class="text-base/7 font-semibold text-primary-600">{name}</h3>
+			<div class="mt-4 flex items-baseline gap-x-2">
+				<span class="text-5xl font-semibold tracking-tight text-gray-900"
+					>{formatCurrency(cost)}</span
+				>
+				<span class="text-base/7 font-semibold text-gray-600">/month</span>
+			</div>
+			<p class="mt-6 text-base/7 text-gray-600">
+				{description}
+			</p>
+			<ul role="list" class="mt-10 space-y-4 text-sm/6 text-gray-600">
+				{#each features as feature}
+					<li class="flex gap-x-3">
+						<svg
+							class="h-6 w-5 flex-none text-primary-600"
+							viewBox="0 0 20 20"
+							fill="currentColor"
+							aria-hidden="true"
+							data-slot="icon"
+						>
+							<path
+								fill-rule="evenodd"
+								d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
+								clip-rule="evenodd"
+							/>
+						</svg>
+						{feature}
+					</li>
+				{/each}
+			</ul>
+		</div>
+		<a
+			href="#"
+			aria-describedby="tier-hobby"
+			class="mt-8 block rounded-md bg-primary-600 px-3.5 py-2 text-center text-sm/6 font-semibold text-white shadow-xs hover:bg-primary-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+		>
+			Get started today
+		</a>
+	</div>
+{/snippet}
