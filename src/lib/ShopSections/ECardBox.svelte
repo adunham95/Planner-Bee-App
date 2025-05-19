@@ -13,8 +13,7 @@
 <div class="inline-flex flex-col text-center lg:w-auto">
 	<a href={href || '#'} class="group relative">
 		<img
-			src={template.imageURL ||
-				'https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-02-product-01.jpg'}
+			src={template.imageURL || '/images/placeholder-ecard-img.png'}
 			alt="Black machined steel pen with hexagonal grip and small white logo at top."
 			class="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75"
 		/>
