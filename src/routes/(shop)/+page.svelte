@@ -18,7 +18,7 @@
 
 <FeauturesProducts products={data.products.map((p) => p.ecardTemplate)} href="/shop/ecard" />
 
-<CategorySections categories={data.categories} />
+<!-- <CategorySections categories={data.categories} /> -->
 
 <HowItWorks />
 

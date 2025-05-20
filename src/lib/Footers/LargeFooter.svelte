@@ -1,52 +1,22 @@
 <footer class="bg-white">
 	<div class="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8 lg:py-32">
-		<div class="xl:grid xl:grid-cols-3 xl:gap-8">
-			<img class="h-9" src="/images/logo-brand.svg" alt="Company name" />
-			<div class="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
-				<div class="md:grid md:grid-cols-2 md:gap-8">
-					<div>
-						<h3 class="text-sm/6 font-semibold text-gray-900">Solutions</h3>
-						<ul role="list" class="mt-6 space-y-4">
-							<li>
-								<a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Marketing</a>
-							</li>
-							<li>
-								<a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Analytics</a>
-							</li>
-							<li>
-								<a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Automation</a>
-							</li>
-							<li>
-								<a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Commerce</a>
-							</li>
-							<li>
-								<a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Insights</a>
-							</li>
-						</ul>
-					</div>
-					<div class="mt-10 md:mt-0">
-						<h3 class="text-sm/6 font-semibold text-gray-900">Support</h3>
-						<ul role="list" class="mt-6 space-y-4">
-							<li>
-								<a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Submit ticket</a>
-							</li>
-							<li>
-								<a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Documentation</a>
-							</li>
-							<li>
-								<a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Guides</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-				<div class="md:grid md:grid-cols-2 md:gap-8">
+		<div class="md:grid md:grid-cols-3 md:gap-8">
+			<div class="space-y-8">
+				<img class="h-9" src="/images/logo-brand.svg" alt="Planner Bee" />
+				<p class="text-sm/6 text-balance text-gray-600">
+					Making the world a better place through constructing elegant hierarchies.
+				</p>
+			</div>
+
+			<div class="mt-16 grid grid-cols-2 gap-8 md:col-span-2 md:mt-0">
+				<div class="sm:grid sm:grid-cols-2 sm:gap-8">
 					<div>
 						<h3 class="text-sm/6 font-semibold text-gray-900">Company</h3>
 						<ul role="list" class="mt-6 space-y-4">
 							<li>
-								<a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">About</a>
+								<a href="/about-us" class="text-sm/6 text-gray-600 hover:text-gray-900">About</a>
 							</li>
-							<li>
+							<!-- <li>
 								<a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Blog</a>
 							</li>
 							<li>
@@ -54,21 +24,25 @@
 							</li>
 							<li>
 								<a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Press</a>
-							</li>
+							</li> -->
 						</ul>
 					</div>
-					<div class="mt-10 md:mt-0">
+					<div class="mt-10 sm:mt-0">
 						<h3 class="text-sm/6 font-semibold text-gray-900">Legal</h3>
 						<ul role="list" class="mt-6 space-y-4">
 							<li>
-								<a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Terms of service</a>
+								<a href="/terms-of-service" class="text-sm/6 text-gray-600 hover:text-gray-900"
+									>Terms of service</a
+								>
 							</li>
 							<li>
-								<a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Privacy policy</a>
+								<a href="/privacy-policy" class="text-sm/6 text-gray-600 hover:text-gray-900"
+									>Privacy policy</a
+								>
 							</li>
-							<li>
+							<!-- <li>
 								<a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">License</a>
-							</li>
+							</li> -->
 						</ul>
 					</div>
 				</div>
@@ -127,7 +101,7 @@
 			</a>
 		</div>
 		<p class="mt-8 text-center text-sm/6 text-gray-600 md:order-1 md:mt-0">
-			&copy; 2024 Your Company, Inc. All rights reserved.
+			&copy; 2024 Planner Bee, Inc. All rights reserved.
 		</p>
 	</div>
 </footer>
