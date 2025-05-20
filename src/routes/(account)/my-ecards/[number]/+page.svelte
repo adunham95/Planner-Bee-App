@@ -3,6 +3,10 @@
 	import Container from '$lib/Container.svelte';
 
 	const eCardID = 'ECARD-M9XEDZ2D-0MX1';
+
+	const { data } = $props();
+
+	console.log(data);
 </script>
 
 <Container>
@@ -12,12 +16,16 @@
 		<div class="mt-2 border-b border-gray-200 pb-5 text-sm sm:flex sm:justify-between">
 			<dl class="flex">
 				<dt class="text-gray-500">ECard number:&nbsp;</dt>
-				<dd class="font-medium text-gray-900">W086438695</dd>
-				<dt>
-					<span class="sr-only">Date</span>
-					<span class="mx-2 text-gray-400" aria-hidden="true">&middot;</span>
-				</dt>
-				<dd class="font-medium text-gray-900"><time datetime="2021-03-22">March 22, 2021</time></dd>
+				<dd class="font-medium text-gray-900">{data.eCard.eCardNumber}</dd>
+				{#if data.eCard.deliveryDate}
+					<dt>
+						<span class="sr-only">Date</span>
+						<span class="mx-2 text-gray-400" aria-hidden="true">&middot;</span>
+					</dt>
+					<dd class="font-medium text-gray-900">
+						<time datetime="2021-03-22">March 22, 2021</time>
+					</dd>
+				{/if}
 			</dl>
 		</div>
 
@@ -34,7 +42,7 @@
 				{
 					title: 'View ECard',
 					description: 'View the ecard',
-					href: `/ecard/${eCardID}`,
+					href: `/ecard/${data.eCard.eCardNumber}`,
 					icon: ecard,
 					bgColor: 'bg-pastel-lilac'
 				},
