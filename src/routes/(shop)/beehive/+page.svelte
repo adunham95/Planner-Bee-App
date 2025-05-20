@@ -20,19 +20,19 @@
 				{@render subscriptionCard(
 					'WorkerBee Member',
 					'Free plan to get you onboard buzzing around',
-					['Paid ECards', 'Whole Catalog Access'],
+					['50 Contacts', 'Paid ECards', 'Whole Catalog Access'],
 					0
 				)}
 				{@render subscriptionCard(
 					'BumbleBee Member',
 					'Take your planning to the next level with access to exclusive tools and features designed to save you time and make your creations shine.',
-					['Set and Send', 'Unlimited ECards'],
+					['500 Contacts', 'Set and Send', 'Unlimited ECards'],
 					499
 				)}
 				{@render subscriptionCard(
 					'VIBee Member',
 					'Take your planning to the next level with access to exclusive tools and features designed to save you time and make your creations shine.',
-					['Advanced Editing Tools', 'Custom ECard Templates'],
+					['Advanced Editing Tools', 'Custom ECard Templates', 'Unlimited Contacts'],
 					999
 				)}
 			</div>
