@@ -3,7 +3,13 @@
 	let { children } = $props();
 </script>
 
-<AdminHeader routes={[{ title: 'New ECard Template', path: '/admin/ecardtemplate/new' }]} />
+<AdminHeader
+	routes={[
+		{ title: 'Home', path: '/' },
+		{ title: 'Current Templates', path: '/admin' },
+		{ title: 'New ECard Template', path: '/admin/ecardtemplate/new' }
+	]}
+/>
 
 <main>
 	{@render children()}

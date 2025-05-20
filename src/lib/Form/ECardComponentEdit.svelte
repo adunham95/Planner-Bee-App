@@ -1,9 +1,13 @@
 <script lang="ts">
-	import { eCardComponents } from '$lib/data/ecardComponents';
+	import { PUBLIC_API_URL } from '$env/static/public';
+	import Accordian from '$lib/Components/Accordian.svelte';
+	import { eCardComponents, getComponentDetailsByID } from '$lib/data/ecardComponents';
+	import EditElements from '$lib/ECard/EditElements.svelte';
 	import Select from '$lib/FormElements/Select.svelte';
 	import TextArea from '$lib/FormElements/TextArea.svelte';
 	import TextInput from '$lib/FormElements/TextInput.svelte';
 	import Toggle from '$lib/FormElements/Toggle.svelte';
+	import { toastStore } from '$lib/stores/toast';
 
 	const componentTypes = eCardComponents.map((comp) => {
 		return {
@@ -12,44 +16,124 @@
 		};
 	});
 
-	interface Props {
-		components: { id: string; value: any; action?: string }[];
+	export interface Component {
+		id: string;
+		value: any;
+		action?: string;
 	}
 
-	let { components = $bindable([]) }: Props = $props();
+	interface Props {
+		eCardID?: string | null;
+		components: Component[];
+	}
 
+	let { eCardID, components = $bindable([]) }: Props = $props();
+
+	$inspect(components);
 	function generateID(length: number) {
 		return [...Array(length)].map(() => (~~(Math.random() * 36)).toString(36)).join('');
 	}
 
-	// export let value: { id: string; value: any; action?: string }[] = [
-	// 	{ id: generateID(4), value: {}, action: 'add' }
-	// ];
+	async function addItem() {
+		if (!eCardID || eCardID === null) {
+			toastStore.show({ type: 'warning', message: 'No ECard ID' });
+			return;
+		}
 
-	const addItem = () => {
-		components = [...components, { id: generateID(4), value: { editable: false } }];
-	};
+		const url = `${PUBLIC_API_URL}/ecard-components`;
 
-	const removeItem = (idToRemove: string) => {
-		components = components.filter((e) => e.id !== idToRemove);
-	};
+		const res = await fetch(url, {
+			method: 'POST',
+			credentials: 'include', // this is critical
+			headers: {
+				'Content-Type': 'application/json' // Set content type to JSON
+			},
+			body: JSON.stringify({
+				ecardID: eCardID,
+				key: generateID(6),
+				ecardComponentID: 'title',
+				editable: false
+			})
+		});
+		const responseData = await res.json();
+		console.log(responseData);
+
+		components = [
+			...components,
+			{
+				id: responseData.id,
+				value: {
+					label: responseData.label,
+					ecardComponentID: responseData.componentID,
+					displayOrder: responseData.order,
+					key: responseData.key,
+					editable: responseData.editable,
+					style: responseData.customStyles,
+					options: JSON.stringify(responseData.options || [])
+				}
+			}
+		];
+	}
+
+	async function removeItem(idToRemove: string) {
+		const url = `${PUBLIC_API_URL}/ecard-components/${idToRemove}`;
+
+		try {
+			const res = await fetch(url, {
+				method: 'DELETE',
+				credentials: 'include', // this is critical
+				headers: {
+					'Content-Type': 'application/json' // Set content type to JSON
+				}
+			});
+			if (res.ok) {
+				components = components.filter((e) => e.id !== idToRemove);
+				toastStore.show({ type: 'success', message: 'removed item' });
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	}
+
+	async function saveECardTemplateItem(component: Component) {
+		if (!component) {
+			toastStore.show({ type: 'error', message: 'Error saving element' });
+			return;
+		}
+		try {
+			const url = `${PUBLIC_API_URL}/ecard-components/${component.id}`;
+			const res = await fetch(url, {
+				method: 'PATCH',
+				credentials: 'include', // this is critical
+				headers: {
+					'Content-Type': 'application/json' // Set content type to JSON
+				},
+				body: JSON.stringify({
+					...component.value,
+					options: component?.value?.options ? JSON.parse(component?.value?.options) : []
+				})
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	}
 </script>
 
 <ul role="list" class={`mt-2 divide-y divide-gray-200`}>
 	{#each components as item, idx}
-		<li class={`flex items-end justify-between py-3 ${item.action === 'remove' && 'hidden'}`}>
-			<details>
-				<summary class="flex justify-between"
-					>{item.value.label || 'Component ' + idx}
+		<li
+			class={`flex items-end justify-between py-3 w-full ${item.action === 'remove' && 'hidden'}`}
+		>
+			<Accordian title={item.value.label || 'Component ' + (idx + 1)}>
+				{#snippet actions()}
 					<button
 						onclick={() => removeItem(item.id)}
 						type="button"
-						class="ml-6 rounded-md bg-white text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer"
+						class="ml-6 rounded-md text-sm font-medium text-white hover:text-gray-50 cursor-pointer"
 					>
 						Remove
 					</button>
-				</summary>
-
+				{/snippet}
 				<div class="grid grid-cols-2 w-full gap-4 pb-2">
 					<TextInput
 						label="Label"
@@ -83,26 +167,35 @@
 						id="${item.id}%%editable"
 						label="Editable"
 					/>
-					<TextArea
+					<EditElements
+						isDevMode
+						label="Default Option"
+						className="col-span-2"
+						name={item.id}
+						componentKey={item.value.ecardComponentID}
 						bind:value={item.value.default}
-						label="Default Value"
-						id={`${item.id}%%default`}
-						className="col-span-2"
 					/>
-					<TextArea
-						bind:value={item.value.style}
-						label="Custom Styles"
-						id={`${item.id}%%customStyle`}
-						className="col-span-2"
-					/>
-					<TextArea
-						bind:value={item.value.options}
-						label="Options"
-						id={`${item.id}%%options`}
-						className="col-span-2"
-					/>
+					{#if getComponentDetailsByID(item.value.ecardComponentID).hasCustomStyles}
+						<TextArea
+							bind:value={item.value.style}
+							label="Custom Styles"
+							id={`${item.id}%%customStyle`}
+							className="col-span-2"
+						/>
+					{/if}
+					{#if getComponentDetailsByID(item.value.ecardComponentID).hasOptions}
+						<TextArea
+							bind:value={item.value.options}
+							label="Options"
+							id={`${item.id}%%options`}
+							className="col-span-2"
+						/>
+					{/if}
+					<div>
+						<button class="btn" onclick={() => saveECardTemplateItem(item)}>Save Element</button>
+					</div>
 				</div>
-			</details>
+			</Accordian>
 		</li>
 	{/each}
 	<li class="flex items-center justify-between py-2">

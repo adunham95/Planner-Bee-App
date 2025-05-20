@@ -4,35 +4,46 @@ export const eCardComponents = [
 		name: 'Title',
 		description: 'Display a title',
 		editComponentKey: 'text',
-		displayComponentKey: 'title'
+		displayComponentKey: 'title',
+		hasOptions: false,
+		hasCustomStyles: true
 	},
 	{
 		id: 'message',
 		name: 'Message',
 		description: 'Write a custom message',
 		editComponentKey: 'textArea',
-		displayComponentKey: 'message'
+		displayComponentKey: 'message',
+		hasOptions: false,
+		hasCustomStyles: true
 	},
 	{
 		id: 'banner',
 		name: 'Banner',
 		description: 'Add a banner image',
-		editComponentKey: 'text',
-		displayComponentKey: 'banner'
+		editComponentKey: 'imageUpload',
+		displayComponentKey: 'banner',
+		hasOptions: false,
+		hasCustomStyles: true
 	},
 	{
 		id: 'event',
 		name: 'Event',
 		description: 'Add basic event details',
 		editComponentKey: 'event',
-		displayComponentKey: 'event'
+		displayComponentKey: 'event',
+		hasOptions: false,
+		hasCustomStyles: false
 	},
 	{
 		id: 'color-list',
 		name: 'Color List',
 		description: 'Pick a color',
 		editComponentKey: 'colorList',
+		devComponentKey: 'colorInput',
 		displayComponentKey: 'color',
+		hasOptions: true,
+		hasCustomStyles: true,
 		options: [
 			'#FF0000',
 			'#F08080',
@@ -70,6 +81,25 @@ export const eCardComponents = [
 		name: 'Color Input',
 		description: 'Pick a color',
 		editComponentKey: 'colorInput',
-		displayComponentKey: 'color'
+		displayComponentKey: 'color',
+		hasOptions: false,
+		hasCustomStyles: false
 	}
 ];
+
+export function getComponentDetailsByID(key: string) {
+	const data = eCardComponents.find((comp) => comp.id === key);
+	if (!data) {
+		return {
+			id: '',
+			name: '',
+			description: '',
+			editComponentKey: 'text',
+			devComponentKey: 'text',
+			displayComponentKey: 'text',
+			hasOptions: false,
+			hasCustomStyles: false
+		};
+	}
+	return data;
+}

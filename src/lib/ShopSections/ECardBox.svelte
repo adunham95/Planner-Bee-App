@@ -18,8 +18,8 @@
 			class="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75"
 		/>
 		<div class="mt-4">
-			<div class=" flex items-center justify-between text-sm font-medium text-gray-900">
-				<h3>{template.name}</h3>
+			<div class=" flex items-top justify-between text-sm font-medium text-gray-900">
+				<h3 class=" text-left">{template.name}</h3>
 				<p>{formatCurrency(template.cost)}</p>
 			</div>
 			<div class="flex items-center justify-start mt-1">
