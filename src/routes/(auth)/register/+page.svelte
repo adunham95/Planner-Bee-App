@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { PUBLIC_API_URL } from '$env/static/public';
+	import TextInput from '$lib/FormElements/TextInput.svelte';
 
 	let email = $state('');
 	let password = $state('');
-	let name = $state('');
+	let firstName = $state('');
+	let lastName = $state('');
 	let isLoading = $state(false);
 
 	async function login(e: SubmitEvent) {
@@ -21,7 +23,8 @@
 				body: JSON.stringify({
 					email,
 					password,
-					name
+					firstName,
+					lastName
 				})
 			});
 			if (res.ok) {
@@ -44,21 +47,10 @@
 	<h2 class="mt-6 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
 		Create your account
 	</h2>
-	<div>
-		<label for="name" class="block text-sm/6 font-medium text-gray-900">Full Name</label>
-		<div class="mt-2">
-			<input
-				type="name"
-				name="name"
-				id="name"
-				autocomplete="name"
-				required
-				bind:value={name}
-				class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-			/>
-		</div>
-	</div>
+	<TextInput id="firstname" label="First Name" autocomplete="given-name" bind:value={firstName} />
+	<TextInput id="lastname" label="Last Name" autocomplete="family-name" bind:value={firstName} />
 
+	<!-- TODO Change to components -->
 	<div>
 		<label for="email" class="block text-sm/6 font-medium text-gray-900">Email address</label>
 		<div class="mt-2">

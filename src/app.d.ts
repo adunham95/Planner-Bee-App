@@ -12,6 +12,12 @@ declare global {
 	}
 }
 
+interface User {
+	firstName: string;
+	lastName: string;
+	email: string;
+}
+
 interface Categories {
 	id: string;
 	name: string;
@@ -66,4 +72,4 @@ interface ECardComponent {
 	order: number;
 }
 
-export { Categories, ECardTemplate, ECardComponent, FeaturedProduct, ECard };
+export { Categories, ECardTemplate, ECardComponent, FeaturedProduct, ECard, User };
