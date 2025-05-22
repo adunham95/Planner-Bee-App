@@ -6,12 +6,19 @@
 		actions?: Snippet;
 		children: Snippet;
 		childrenWrapperClassName?: string;
+		className?: string;
 	}
 
-	const { children, title, actions, childrenWrapperClassName = '' }: Props = $props();
+	const {
+		children,
+		title,
+		actions,
+		childrenWrapperClassName = '',
+		className = ''
+	}: Props = $props();
 </script>
 
-<details class="[&_svg]:open:-rotate-180 w-full">
+<details class={`[&_svg]:open:-rotate-180 w-full ${className}`}>
 	<summary
 		class="flex justify-between cursor-pointer list-none items-center gap-4 btn btn-text w-full"
 	>

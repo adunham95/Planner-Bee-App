@@ -1,13 +1,116 @@
-<script>
+<script lang="ts">
+	import { PUBLIC_API_URL } from '$env/static/public';
+	import Accordian from '$lib/Components/Accordian.svelte';
+	import Drawer from '$lib/Components/Overlay/Drawer.svelte';
+	import Modal from '$lib/Components/Overlay/Modal.svelte';
 	import StartingPointList from '$lib/Components/StartingPointList.svelte';
+	import StatusChip from '$lib/Components/StatusChip.svelte';
 	import Container from '$lib/Container.svelte';
+	import EditElements from '$lib/ECard/EditElements.svelte';
+	import { toastStore } from '$lib/stores/toast.js';
+	import { copyToClipboard } from '$lib/util/copyToClipboard.js';
 
 	const eCardID = 'ECARD-M9XEDZ2D-0MX1';
 
 	const { data } = $props();
 
-	console.log(data);
+	const editableComponents = $derived.by(() => {
+		return data.eCard.options.filter((o) => o.eCardComponent);
+	});
+
+	console.log({ data, editableComponents });
+
+	let isOpen = $state(false);
+	let showModal = $state(false);
+
+	async function saveOption(id: string) {
+		const component = editableComponents.find((c) => c.id === id);
+		if (component) {
+			const value = component.value;
+			console.log(value);
+
+			try {
+				const res = await fetch(`${PUBLIC_API_URL}/option-items/${id}`, {
+					method: 'PATCH',
+					credentials: 'include', // this is critical
+					headers: {
+						'Content-Type': 'application/json' // Set content type to JSON
+					},
+					body: JSON.stringify({
+						value
+					})
+				});
+				const responseData = await res.json();
+				if (res.ok) {
+					console.log(responseData);
+					toastStore.show({ message: 'Option Updated', type: 'success' });
+				} else {
+					console.log(responseData);
+					toastStore.show({
+						message: 'There was an error',
+						type: 'error',
+						details: responseData.message
+					});
+				}
+			} catch (error) {
+				console.error('There was a problem with the fetch operation:', error);
+				toastStore.show({ message: 'There was an error', type: 'error' });
+			}
+		}
+	}
+
+	async function cancelCard() {
+		try {
+			const res = await fetch(`${PUBLIC_API_URL}/ecards/${data.eCard.id}`, {
+				method: 'PATCH',
+				credentials: 'include', // this is critical
+				headers: {
+					'Content-Type': 'application/json' // Set content type to JSON
+				},
+				body: JSON.stringify({
+					status: 'canceled'
+				})
+			});
+			const responseData = await res.json();
+			if (res.ok) {
+				console.log(responseData);
+				toastStore.show({ message: 'Card Canceled', type: 'success' });
+			} else {
+				console.log(responseData);
+				toastStore.show({
+					message: 'There was an error',
+					type: 'error',
+					details: responseData.message
+				});
+			}
+		} catch (error) {
+			console.error('There was a problem with the fetch operation:', error);
+			toastStore.show({ message: 'There was an error', type: 'error' });
+		}
+	}
 </script>
+
+<Drawer id="user" bind:isOpen title="Edit" onClose={() => (isOpen = false)}>
+	{#each editableComponents as comp}
+		{console.log(comp)}
+		{#if comp.eCardComponent.editable}
+			<Accordian title={comp.eCardComponent.label} className={'mb-2'}>
+				<EditElements
+					componentKey={comp.eCardComponent.ecardComponentID}
+					label={comp.eCardComponent.label}
+					bind:value={comp.value}
+				/>
+				<div class="flex justify-end">
+					<button onclick={() => saveOption(comp.id)}>Save</button>
+				</div>
+			</Accordian>
+		{/if}
+	{/each}
+</Drawer>
+
+<Modal bind:showModal className="w-[500px]">
+	<h1>Modal</h1>
+</Modal>
 
 <Container>
 	<main class="py-4 px-2 sm:px-2 lg:px-8">
@@ -17,6 +120,10 @@
 			<dl class="flex">
 				<dt class="text-gray-500">ECard number:&nbsp;</dt>
 				<dd class="font-medium text-gray-900">{data.eCard.eCardNumber}</dd>
+				<dt>
+					<span class="mx-2 text-gray-400" aria-hidden="true">&middot;</span>
+				</dt>
+				<StatusChip status={data.eCard.status} />
 				{#if data.eCard.deliveryDate}
 					<dt>
 						<span class="sr-only">Date</span>
@@ -34,7 +141,10 @@
 				{
 					title: 'Copy Shareable Link',
 					description: 'Copy a link to share with family an friends',
-					onClick: () => alert('Clicked'),
+					onClick: () => {
+						copyToClipboard(`https://plannerbeecards.com/ecard/${data.eCard.eCardNumber}`);
+						toastStore.show({ message: 'Copied to clipboard!' });
+					},
 					// href: ``,
 					icon: share,
 					bgColor: 'bg-pastel-purple'
@@ -49,14 +159,14 @@
 				{
 					title: 'Cancel ECard',
 					description: 'Cancel the ecard, and make it not able to be seen or signed',
-					onClick: () => alert('Clicked'),
+					onClick: () => cancelCard(),
 					icon: close,
 					bgColor: 'bg-pastel-orange'
 				},
 				{
 					title: 'Edit ECard',
 					description: 'Edit the ecard, make text or other changes',
-					onClick: () => alert('Clicked'),
+					onClick: () => (isOpen = true),
 					icon: edit,
 					bgColor: 'bg-pastel-sky'
 				},
