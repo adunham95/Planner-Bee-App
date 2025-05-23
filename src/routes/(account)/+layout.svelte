@@ -9,7 +9,9 @@
 	appTitle="Planner Bee"
 	routes={[
 		{ title: 'Store', path: '/shop/ecard' },
-		{ title: 'My ECards', path: '/my-ecards' }
+		{ title: 'My ECards', path: '/my-ecards' },
+		{ title: 'Flightline', path: '/account/radar' },
+		{ title: 'Contacts', path: '/account/contacts' }
 	]}
 	profileRoutes={[
 		{ title: 'Account', path: '/account' },

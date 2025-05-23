@@ -4,6 +4,7 @@
 	import Divider from '$lib/Components/Divider.svelte';
 	import SectionTitle from '$lib/Components/SectionTitle.svelte';
 	import Container from '$lib/Container.svelte';
+	import { GLOBALS } from '$lib/data/Globals';
 	import SidebarSection from '$lib/Display/SidebarSection.svelte';
 	import TextInput from '$lib/FormElements/TextInput.svelte';
 	import { eCardCartStore, getEcardOptions, type ECardCart } from '$lib/stores/eCardCheckout';
@@ -152,7 +153,7 @@
 					<li class="flex px-4 py-6 sm:px-6">
 						<div class="shrink-0">
 							<img
-								src={eCardCheckout?.eCardTemplate?.imageURL}
+								src={eCardCheckout?.eCardTemplate?.imageURL || GLOBALS.defaultECardImage}
 								alt="Front of men&#039;s Basic Tee in black."
 								class="w-20 rounded-md aspect-square"
 							/>

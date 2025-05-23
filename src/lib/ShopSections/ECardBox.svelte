@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { GLOBALS } from '$lib/data/Globals';
 	import { formatCurrency } from '$lib/util/formatCurrency';
 	import type { ECardTemplate } from '../../app';
 
@@ -30,7 +31,7 @@
 
 {#snippet templateData(template: ECardTemplate, hidePrice?: boolean)}
 	<img
-		src={template.imageURL || '/images/placeholder-ecard-img.png'}
+		src={template.imageURL || GLOBALS.defaultECardImage}
 		alt="Black machined steel pen with hexagonal grip and small white logo at top."
 		class="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75"
 	/>

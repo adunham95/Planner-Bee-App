@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { GLOBALS } from '$lib/data/Globals';
 	import type { ECardTemplate } from '../../../app';
 	import StatusChip from '../StatusChip.svelte';
 
@@ -14,7 +15,7 @@
 <div class="flex py-6 pb-1 sm:py-10">
 	<div class="mr-4 shrink-0">
 		<img
-			src={template.imageURL}
+			src={template.imageURL || GLOBALS.defaultECardImage}
 			alt={template.name}
 			class="col-start-2 col-end-3 size-20 rounded-lg object-cover sm:col-start-1 sm:row-span-2 sm:row-start-1 sm:size-40 lg:size-52"
 		/>
