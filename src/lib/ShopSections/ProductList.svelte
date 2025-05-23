@@ -3,10 +3,12 @@
 	import ECardBox from './ECardBox.svelte';
 
 	interface Props {
+		hidePrice?: boolean;
+		onClick?: (product: ECardTemplate) => void;
 		products: ECardTemplate[];
 	}
 
-	const { products }: Props = $props();
+	const { products, hidePrice, onClick }: Props = $props();
 
 	// const visibleProducts = products.slice(0,4)
 	const visibleProducts = products;
@@ -20,7 +22,7 @@
 		>
 			{#each visibleProducts as prod}
 				<li class="pb-4">
-					<ECardBox template={prod} href={`/shop/ecard/${prod.sku}`} />
+					<ECardBox {hidePrice} {onClick} template={prod} href={`/shop/ecard/${prod.sku}`} />
 				</li>
 			{/each}
 		</ul>

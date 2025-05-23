@@ -3,39 +3,57 @@
 	import type { ECardTemplate } from '../../app';
 
 	interface Props {
+		hidePrice?: boolean;
 		template: ECardTemplate;
 		href?: string;
+		onClick?: (product: ECardTemplate) => void;
 	}
 
-	const { template, href }: Props = $props();
+	const { template, href, hidePrice = false, onClick }: Props = $props();
 </script>
 
 <div class="inline-flex flex-col text-center lg:w-auto">
-	<a href={href || '#'} class="group relative">
-		<img
-			src={template.imageURL || '/images/placeholder-ecard-img.png'}
-			alt="Black machined steel pen with hexagonal grip and small white logo at top."
-			class="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75"
-		/>
-		<div class="mt-4">
-			<div class=" flex items-top justify-between text-sm font-medium text-gray-900">
-				<h3 class=" text-left">{template.name}</h3>
-				<p>{formatCurrency(template.cost)}</p>
-			</div>
-			<div class="flex items-center justify-start mt-1">
-				<p class="text-xs text-gray-500 italic pr-2 truncate">{template.description}</p>
-				<ul role="list" class=" flex items-center justify-center space-x-3">
-					{#each template.includedOptions as opt}
-						<li class="size-4 rounded-full">
-							<span class="sr-only">{opt}</span>
-							{@render optionIcon(opt)}
-						</li>
-					{/each}
-				</ul>
-			</div>
+	{#if onClick}
+		<button onclick={() => onClick(template)} class="group relative">
+			{@render templateData(template, hidePrice)}
+		</button>
+	{:else if href}
+		<a href={href || '#'} class="group relative">
+			{@render templateData(template, hidePrice)}
+		</a>
+	{:else}
+		<div class="group relative">
+			{@render templateData(template, hidePrice)}
 		</div>
-	</a>
+	{/if}
 </div>
+
+{#snippet templateData(template: ECardTemplate, hidePrice?: boolean)}
+	<img
+		src={template.imageURL || '/images/placeholder-ecard-img.png'}
+		alt="Black machined steel pen with hexagonal grip and small white logo at top."
+		class="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75"
+	/>
+	<div class="mt-4">
+		<div class=" flex items-top justify-between text-sm font-medium text-gray-900">
+			<h3 class=" text-left">{template.name}</h3>
+			{#if !hidePrice}
+				<p>{formatCurrency(template.cost)}</p>
+			{/if}
+		</div>
+		<div class="flex items-center justify-start mt-1">
+			<p class="text-xs text-gray-500 italic pr-2 truncate">{template.description}</p>
+			<ul role="list" class=" flex items-center justify-center space-x-3">
+				{#each template.includedOptions as opt}
+					<li class="size-4 rounded-full">
+						<span class="sr-only">{opt}</span>
+						{@render optionIcon(opt)}
+					</li>
+				{/each}
+			</ul>
+		</div>
+	</div>
+{/snippet}
 
 {#snippet optionIcon(iconName: string)}
 	{#if iconName === 'mealTrainEnabled'}

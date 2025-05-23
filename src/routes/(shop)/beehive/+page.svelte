@@ -15,25 +15,33 @@
 				need to create beautiful, personalized, and automated events without the hassle.
 			</p>
 		</div>
-		<div class="py-4 space-y-3 mx-auto max-w-10xl">
+		<div class="my-10 space-y-3 mx-auto max-w-10xl">
 			<div class="w-full grid grid-cols-1 gap-8 lg:grid-cols-3">
 				{@render subscriptionCard(
 					'WorkerBee Member',
-					'Free plan to get you onboard buzzing around',
-					['50 Contacts', 'Paid ECards', 'Whole Catalog Access'],
+					'Perfect for sending occasional eCards',
+					['A la cart eCards', 'Send via text, email, or shareable link'],
 					0
 				)}
 				{@render subscriptionCard(
 					'BumbleBee Member',
-					'Take your planning to the next level with access to exclusive tools and features designed to save you time and make your creations shine.',
-					['500 Contacts', 'Set and Send', 'Unlimited ECards'],
-					499
+					'For busy bees who send often and want more privacy',
+					[
+						'No eCard expiration dates',
+						'Private & password-protected eCards',
+						'All eCards are free to use'
+					],
+					699
 				)}
 				{@render subscriptionCard(
 					'VIBee Member',
-					'Take your planning to the next level with access to exclusive tools and features designed to save you time and make your creations shine.',
-					['Advanced Editing Tools', 'Custom ECard Templates', 'Unlimited Contacts'],
-					999
+					'For power users who want it all',
+					[
+						'Create with custom templates',
+						'Access advanced editing tools',
+						'Free access to FlightPlan — our subscription management service'
+					],
+					1699
 				)}
 			</div>
 		</div>
@@ -50,7 +58,9 @@
 				<span class="text-5xl font-semibold tracking-tight text-gray-900"
 					>{formatCurrency(cost)}</span
 				>
-				<span class="text-base/7 font-semibold text-gray-600">/month</span>
+				{#if cost > 0}
+					<span class="text-base/7 font-semibold text-gray-600">/month</span>
+				{/if}
 			</div>
 			<p class="mt-6 text-base/7 text-gray-600">
 				{description}

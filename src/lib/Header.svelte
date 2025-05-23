@@ -12,6 +12,7 @@
 		{ title: 'ECards', path: '/shop/ecard' },
 		{ title: 'About Us', path: '/about-us' },
 		{ title: 'BeeHive', path: '/beehive' },
+		{ title: 'FlightPlan', path: '/flightplan' },
 		{ title: 'Roadmap', path: '/road-map' }
 	];
 	const profileRoutes: route[] = [];

@@ -7,13 +7,25 @@
 	import SidebarSection from '$lib/Display/SidebarSection.svelte';
 	import ECard from '$lib/ECard/ECard.svelte';
 	import EditElements from '$lib/ECard/EditElements.svelte';
-	import { eCardCartStore } from '$lib/stores/eCardCheckout.js';
+	import { eCardCartStore, type ECardCart } from '$lib/stores/eCardCheckout.js';
+	import { onDestroy } from 'svelte';
 
 	let { data } = $props();
 
 	let isLoading = $state(false);
 
 	let options: { [key: string]: string } = $state({});
+
+	let eCardCheckout: ECardCart | undefined = $state();
+
+	const unsubscribe = eCardCartStore.subscribe((c) => {
+		console.log(c);
+		eCardCheckout = c;
+	});
+
+	onDestroy(() => {
+		unsubscribe();
+	});
 
 	$effect(() => {
 		(data?.product?.components || []).forEach((comp) => {
@@ -28,7 +40,11 @@
 
 	function continueToSummary(isCustom?: boolean) {
 		eCardCartStore.initialize(data.product, options, isCustom);
-		goto('/shop/summary');
+		if (eCardCheckout?.isFlightplan) {
+			goto('/flightplan/select-group');
+		} else {
+			goto('/shop/summary');
+		}
 	}
 </script>
 

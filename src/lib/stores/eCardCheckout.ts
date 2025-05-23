@@ -5,6 +5,7 @@ export interface ECardCart {
 	eCardTemplate?: ECardTemplate;
 	options: { [key: string]: string };
 	isCustom: boolean;
+	isFlightplan: boolean;
 	sender: {
 		email?: string;
 		name?: string;
@@ -22,6 +23,7 @@ export interface ECardCart {
 const STORAGE_KEY = 'cart-cart';
 
 const initialCart = {
+	isFlightplan: false,
 	eCardTemplate: undefined,
 	options: {},
 	isCustom: false,
@@ -71,6 +73,13 @@ function createECardCartStore() {
 	function setTemplate(template: ECardTemplate) {
 		update((cart) => {
 			cart.eCardTemplate = template;
+			return cart;
+		});
+	}
+
+	function enableFlightPlan() {
+		update((cart) => {
+			cart.isFlightplan = true;
 			return cart;
 		});
 	}
@@ -126,7 +135,8 @@ function createECardCartStore() {
 		addRecipient,
 		deleteRecipient,
 		updateRecipient,
-		updateSender
+		updateSender,
+		enableFlightPlan
 	};
 }
 
