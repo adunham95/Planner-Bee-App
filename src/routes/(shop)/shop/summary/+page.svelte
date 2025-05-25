@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { PUBLIC_API_URL } from '$env/static/public';
+	import { PUBLIC_API_URL, PUBLIC_STRIPE_API_KEY } from '$env/static/public';
 	import Divider from '$lib/Components/Divider.svelte';
 	import SectionTitle from '$lib/Components/SectionTitle.svelte';
 	import Container from '$lib/Container.svelte';
@@ -9,28 +9,58 @@
 	import TextInput from '$lib/FormElements/TextInput.svelte';
 	import { eCardCartStore, getEcardOptions, type ECardCart } from '$lib/stores/eCardCheckout';
 	import { toastStore } from '$lib/stores/toast';
-	import { onDestroy } from 'svelte';
+	import { loadStripe, type Stripe, type StripeCheckout } from '@stripe/stripe-js';
+	import { onDestroy, onMount } from 'svelte';
 
+	let stripe: Stripe | null = null;
+	let stripeCheckout: StripeCheckout | null = null;
 	let eCardCheckout: ECardCart | undefined = $state();
 	let isLoading = $state(false);
+
+	const isFreeCard = $derived.by(() => {
+		return eCardCheckout?.eCardTemplate?.cost === 0;
+	});
 
 	const unsubscribe = eCardCartStore.subscribe((t) => {
 		console.log(t);
 		eCardCheckout = t;
 	});
 
+	const fetchClientSecret = () => {
+		console.log('sku', eCardCheckout?.eCardTemplate?.sku);
+		return fetch(`${PUBLIC_API_URL}/stripe/create-checkout-session`, {
+			method: 'POST',
+			credentials: 'include', // this is critical
+			headers: {
+				'Content-Type': 'application/json' // Set content type to JSON
+			},
+			body: JSON.stringify({ skus: [eCardCheckout?.eCardTemplate?.sku] })
+		})
+			.then((response) => response.json())
+			.then((json) => json.checkoutSessionClientSecret);
+	};
+
+	onMount(async () => {
+		stripe = await loadStripe(PUBLIC_STRIPE_API_KEY);
+		if (stripe) {
+			stripe.initCheckout({ fetchClientSecret }).then((checkout) => {
+				stripeCheckout = checkout;
+				const paymentElement = checkout.createPaymentElement();
+				paymentElement.mount('#payment-element');
+			});
+		}
+	});
+
 	onDestroy(() => {
 		unsubscribe();
 	});
 
-	async function sendECard() {
-		isLoading = true;
-		if (!eCardCheckout?.eCardTemplate) {
-			isLoading = false;
-			return toastStore.show({ type: 'error', message: 'There was an error saving your card' });
-		}
+	async function createECard() {
 		const cardOptions = getEcardOptions();
 		try {
+			if (!eCardCheckout) {
+				throw new Error('Card checkout not defined');
+			}
 			const res = await fetch(`${PUBLIC_API_URL}/ecards`, {
 				method: 'POST',
 				credentials: 'include', // this is critical
@@ -47,23 +77,66 @@
 			const responseData = await res.json();
 			if (res.ok) {
 				console.log(responseData);
-				isLoading = false;
 				toastStore.show({ message: 'Card Created', type: 'success' });
 				eCardCartStore.clearCart();
-				goto(`/my-ecards/${responseData.eCardNumber}`);
+				goto(`/shop/thank-you?eCard=${responseData.eCardNumber}`);
 			} else {
 				console.log(responseData);
-				toastStore.show({
-					message: 'There was an error',
-					type: 'error',
-					details: responseData.message
-				});
-				isLoading = false;
+				// toastStore.show({
+				// 	message: 'There was an error',
+				// 	type: 'error',
+				// 	details: responseData.message
+				// });
 			}
 		} catch (error) {
 			console.error('There was a problem with the fetch operation:', error);
+			// toastStore.show({ message: 'There was an error', type: 'error' });
+		}
+	}
+
+	function valid() {
+		if (!eCardCheckout?.sender.email) {
+			toastStore.show({ type: 'error', message: 'Email required' });
 			isLoading = false;
-			toastStore.show({ message: 'There was an error', type: 'error' });
+			return false;
+		}
+		return true;
+	}
+
+	async function sendECard() {
+		isLoading = true;
+		console.log({ stripeCheckout, isFreeCard });
+		try {
+			if (!stripeCheckout && !isFreeCard) {
+				isLoading = false;
+				toastStore.show({ type: 'error', message: 'There was an error checking out' });
+				console.log('Stripe has not loaded');
+				return;
+			}
+			if (!eCardCheckout?.eCardTemplate) {
+				isLoading = false;
+				toastStore.show({ type: 'error', message: 'There was an error saving your card' });
+				return;
+			}
+			if (stripeCheckout && !isFreeCard) {
+				if (valid()) {
+					await stripeCheckout.updateEmail(eCardCheckout?.sender?.email || '');
+					await stripeCheckout.confirm({ redirect: 'if_required' }).then((result) => {
+						console.log({ result });
+						if (result.type === 'error') {
+							toastStore.show({ type: 'error', message: 'There was an error processing payment' });
+							isLoading = false;
+							return;
+						}
+						if (result.type === 'success') {
+							console.log('success');
+							createECard();
+						}
+					});
+				}
+			}
+		} catch (error) {
+			toastStore.show({ type: 'error', message: 'There was an error processing payment' });
 		}
 	}
 </script>
@@ -143,9 +216,17 @@
 						</div>
 					</div>
 				{/each}
+
 				<div class="flex justify-end">
-					<button class="btn" onclick={eCardCartStore.addRecipient}>Add Recipients</button>
+					<button class="btn" disabled={isLoading} onclick={eCardCartStore.addRecipient}
+						>Add Recipients</button
+					>
 				</div>
+				<Divider />
+				{#if !isFreeCard}
+					<SectionTitle title="Payment" />
+					<div class="pt-4" id="payment-element"></div>
+				{/if}
 			{/snippet}
 			{#snippet sidebarContent()}
 				<SectionTitle titleClass="pt-4" title="Order Summary" />
