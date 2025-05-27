@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { PUBLIC_API_URL, PUBLIC_STRIPE_API_KEY } from '$env/static/public';
 	import Divider from '$lib/Components/Divider.svelte';
 	import SectionTitle from '$lib/Components/SectionTitle.svelte';
@@ -55,42 +54,39 @@
 		unsubscribe();
 	});
 
-	async function createECard() {
+	async function createECard(paymentIntentID?: string) {
 		const cardOptions = getEcardOptions();
-		try {
-			if (!eCardCheckout) {
-				throw new Error('Card checkout not defined');
-			}
-			const res = await fetch(`${PUBLIC_API_URL}/ecards`, {
-				method: 'POST',
-				credentials: 'include', // this is critical
-				headers: {
-					'Content-Type': 'application/json' // Set content type to JSON
-				},
-				body: JSON.stringify({
-					senderEmail: eCardCheckout.sender.email,
-					eCardTemplateSku: eCardCheckout?.eCardTemplate?.sku,
-					options: cardOptions,
-					recipients: eCardCheckout.recipients
-				})
-			});
-			const responseData = await res.json();
-			if (res.ok) {
-				console.log(responseData);
-				toastStore.show({ message: 'Card Created', type: 'success' });
-				eCardCartStore.clearCart();
-				goto(`/shop/thank-you?eCard=${responseData.eCardNumber}`);
-			} else {
-				console.log(responseData);
-				// toastStore.show({
-				// 	message: 'There was an error',
-				// 	type: 'error',
-				// 	details: responseData.message
-				// });
-			}
-		} catch (error) {
-			console.error('There was a problem with the fetch operation:', error);
-			// toastStore.show({ message: 'There was an error', type: 'error' });
+		if (!eCardCheckout) {
+			throw new Error('Card checkout not defined');
+		}
+		if (!eCardCheckout?.eCardTemplate) {
+			isLoading = false;
+			throw new Error('No ECard Template');
+			return;
+		}
+		const res = await fetch(`${PUBLIC_API_URL}/ecards`, {
+			method: 'POST',
+			credentials: 'include', // this is critical
+			headers: {
+				'Content-Type': 'application/json' // Set content type to JSON
+			},
+			body: JSON.stringify({
+				senderEmail: eCardCheckout.sender.email,
+				eCardTemplateSku: eCardCheckout?.eCardTemplate?.sku,
+				options: cardOptions,
+				recipients: eCardCheckout.recipients,
+				status: 'draft',
+				paymentIntentID
+			})
+		});
+		const responseData = await res.json();
+		if (res.ok) {
+			console.log(responseData);
+			toastStore.show({ message: 'Card Created', type: 'success' });
+			// goto(`/shop/thank-you?eCard=${responseData.eCardNumber}`);
+		} else {
+			console.log(responseData);
+			throw new Error('Something went wrong');
 		}
 	}
 
@@ -107,21 +103,20 @@
 		isLoading = true;
 		console.log({ stripeCheckout, isFreeCard });
 		try {
+			if (isFreeCard) {
+				createECard().then(() => eCardCartStore.clearCart());
+			}
 			if (!stripeCheckout && !isFreeCard) {
 				isLoading = false;
 				toastStore.show({ type: 'error', message: 'There was an error checking out' });
 				console.log('Stripe has not loaded');
 				return;
 			}
-			if (!eCardCheckout?.eCardTemplate) {
-				isLoading = false;
-				toastStore.show({ type: 'error', message: 'There was an error saving your card' });
-				return;
-			}
+
 			if (stripeCheckout && !isFreeCard) {
 				if (valid()) {
 					await stripeCheckout.updateEmail(eCardCheckout?.sender?.email || '');
-					await stripeCheckout.confirm({ redirect: 'if_required' }).then((result) => {
+					await stripeCheckout.confirm().then(async (result) => {
 						console.log({ result });
 						if (result.type === 'error') {
 							toastStore.show({ type: 'error', message: 'There was an error processing payment' });
@@ -130,7 +125,9 @@
 						}
 						if (result.type === 'success') {
 							console.log('success');
-							createECard();
+							const paymentIntentId = result.session.id;
+							await createECard(paymentIntentId);
+							eCardCartStore.clearCart();
 						}
 					});
 				}
