@@ -5,7 +5,7 @@ export const load = async () => {
 	const res = await fetch(`${PUBLIC_API_URL}/category`);
 	const categories: Categories[] = await res.json();
 
-	const resProducts = await fetch(`${PUBLIC_API_URL}/ecard-templates/featured`);
+	const resProducts = await fetch(`${PUBLIC_API_URL}/products/featured`);
 	const products: FeaturedProduct[] = await resProducts.json();
 
 	console.log({ categories });

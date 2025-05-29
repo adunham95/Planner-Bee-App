@@ -1,11 +1,11 @@
 <script lang="ts">
-	import type { ECardTemplate } from '../../app';
-	import ECardBox from './ECardBox.svelte';
+	import type { Product } from '../../app';
+	import ProductCard from './ProductCard.svelte';
 
 	interface Props {
 		hidePrice?: boolean;
-		onClick?: (product: ECardTemplate) => void;
-		products: ECardTemplate[];
+		onClick?: (product: Product) => void;
+		products: Product[];
 	}
 
 	const { products, hidePrice, onClick }: Props = $props();
@@ -22,7 +22,12 @@
 		>
 			{#each visibleProducts as prod}
 				<li class="pb-4">
-					<ECardBox {hidePrice} {onClick} template={prod} href={`/shop/ecard/${prod.sku}`} />
+					<ProductCard
+						{hidePrice}
+						{onClick}
+						template={prod}
+						href={`/shop/${prod.productType.toLowerCase()}/${prod.sku}`}
+					/>
 				</li>
 			{/each}
 		</ul>

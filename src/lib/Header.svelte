@@ -10,7 +10,7 @@
 
 	const routes: route[] = [
 		{ title: 'ECards', path: '/shop/ecard' },
-		{ title: 'About Us', path: '/about-us' },
+		{ title: 'Party Boxes', path: '/shop/party-boxes' },
 		{ title: 'BeeHive', path: '/beehive' },
 		{ title: 'FlightPlan', path: '/flightplan' },
 		{ title: 'Roadmap', path: '/road-map' }

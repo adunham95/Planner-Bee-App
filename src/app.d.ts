@@ -24,6 +24,20 @@ interface Categories {
 	imageURL: string;
 }
 
+interface Product {
+	id?: string;
+	sku: string;
+	name: string;
+	description: string;
+	price: number;
+	createdAt?: Date;
+	updatedAt?: Date;
+	imageURL: string;
+	visible: boolean;
+	featured: boolean;
+	productType: string;
+}
+
 interface FeaturedProduct {
 	id: string;
 	ecardTemplate: ECardTemplate;
@@ -72,4 +86,4 @@ interface ECardComponent {
 	order: number;
 }
 
-export { Categories, ECardTemplate, ECardComponent, FeaturedProduct, ECard, User };
+export { Categories, ECardTemplate, ECardComponent, FeaturedProduct, ECard, User, Product };
