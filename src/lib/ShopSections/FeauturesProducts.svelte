@@ -1,11 +1,11 @@
 <script lang="ts">
-	import type { ECardTemplate } from '../../app';
-	import ECardBox from './ECardBox.svelte';
+	import type { Product } from '../../app';
+	import ProductCard from './ProductCard.svelte';
 
 	interface Props {
 		title?: string;
 		href?: string;
-		products: ECardTemplate[];
+		products: Product[];
 	}
 
 	const { products, title = 'Featured Products', href }: Props = $props();
@@ -36,20 +36,11 @@
 				>
 					{#each visibleProducts as prod}
 						<li class="pb-4">
-							<ECardBox template={prod} href={`/shop/ecard/${prod.sku}`} />
+							<ProductCard template={prod} href={`/shop/${prod.productType}/${prod.sku}`} />
 						</li>
 					{/each}
-
-					<!-- More products... -->
 				</ul>
 			</div>
-		</div>
-
-		<div class="mt-12 flex px-4 sm:hidden">
-			<a href="#" class="text-sm font-semibold text-indigo-600 hover:text-indigo-500">
-				See everything
-				<span aria-hidden="true"> &rarr;</span>
-			</a>
 		</div>
 	</div>
 </div>

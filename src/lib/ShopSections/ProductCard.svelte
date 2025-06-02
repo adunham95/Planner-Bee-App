@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { GLOBALS } from '$lib/data/Globals';
 	import { formatCurrency } from '$lib/util/formatCurrency';
-	import type { ECardTemplate, Product } from '../../app';
+	import { truncateString } from '$lib/util/truncateString';
+	import type { Product } from '../../app';
 
 	interface Props {
 		hidePrice?: boolean;
@@ -13,7 +14,7 @@
 	const { template, href, hidePrice = false, onClick }: Props = $props();
 </script>
 
-<div class="inline-flex flex-col text-center lg:w-auto">
+<div class="inline-flex flex-col text-center lg:w-auto truncate">
 	{#if onClick}
 		<button onclick={() => onClick(template)} class="group relative">
 			{@render templateData(template, hidePrice)}
@@ -42,8 +43,8 @@
 				<p>{formatCurrency(template.price)}</p>
 			{/if}
 		</div>
-		<div class="flex items-center justify-start mt-1">
-			<p class="text-xs text-gray-500 italic pr-2 truncate">{template.description}</p>
-		</div>
+		<p class="text-xs text-gray-500 italic truncate w-full text-start">
+			{truncateString(template.description, 30)}
+		</p>
 	</div>
 {/snippet}

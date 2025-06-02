@@ -16,7 +16,7 @@
 	imageURL="/images/pexels-karolina-grabowska-5473156.jpg"
 />
 
-<FeauturesProducts products={data.products.map((p) => p.ecardTemplate)} href="/shop/ecard" />
+<FeauturesProducts products={data.products} href="/shop/ecard" />
 
 <!-- <CategorySections categories={data.categories} /> -->
 

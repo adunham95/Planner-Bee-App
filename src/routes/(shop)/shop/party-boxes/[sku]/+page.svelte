@@ -1,4 +1,5 @@
 <script>
+	import Calender from '$lib/Calender/Calender.svelte';
 	import Divider from '$lib/Components/Divider.svelte';
 	import SectionTitle from '$lib/Components/SectionTitle.svelte';
 	import Container from '$lib/Container.svelte';
@@ -17,6 +18,9 @@
 			</div>
 			<div class="flex items-center pb-2">
 				<p class="text-lg text-gray-900 sm:text-xl">$45</p>
+			</div>
+			<div class="flex items-center pb-2">
+				<p class="text-xs text-gray-900">Shipping Calculated at checkout</p>
 			</div>
 			<p class="text-base text-gray-500">The basic party starter kit</p>
 
@@ -45,6 +49,7 @@
 				/>
 				<CheckCards
 					value=""
+					groupName="tableType"
 					options={[
 						{ id: 'rectangle', label: 'Rectangle' },
 						{ id: 'round', label: 'Round' },
@@ -59,6 +64,7 @@
 				/>
 				<CheckCards
 					value=""
+					groupName="presentTable"
 					options={[
 						{ id: 'rectangle', label: 'Rectangle' },
 						{ id: 'round', label: 'Round' },
@@ -74,6 +80,11 @@
 					label="Customize"
 					subLabel="This will be used for any elements of your party that can be customized"
 				/>
+			</div>
+			<Divider />
+			<div class="mt-4">
+				<SectionTitle title="Party Date" subTitle="To help ensure delivery before you event" />
+				<Calender />
 			</div>
 			<div class="mt-4">
 				<button class="btn w-full">Continue</button>

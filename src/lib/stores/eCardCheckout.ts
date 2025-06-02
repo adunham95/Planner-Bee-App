@@ -20,7 +20,7 @@ export interface ECardCart {
 	}[];
 }
 
-const STORAGE_KEY = 'cart-cart';
+const STORAGE_KEY = 'eCard-cart';
 
 const initialCart = {
 	isFlightplan: false,

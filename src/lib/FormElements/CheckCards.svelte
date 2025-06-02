@@ -2,11 +2,12 @@
 	import type { Snippet } from 'svelte';
 
 	interface Props {
+		groupName: string;
 		options: { id: string; label: string; subLabel?: string; snippet?: Snippet }[];
 		value: string;
 	}
 
-	const { value, options }: Props = $props();
+	let { value = $bindable(), options, groupName }: Props = $props();
 </script>
 
 <div class="mt-1 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -14,7 +15,13 @@
 		<label
 			class="relative block cursor-pointer rounded-lg border border-gray-300 p-4 focus:outline-hidden group has-checked:ring-2 has-checked:ring-primary-500"
 		>
-			<input type="radio" name="size-choice" value={option.id} class="sr-only" />
+			<input
+				type="radio"
+				name={groupName}
+				value={option.id}
+				class="sr-only"
+				onchange={() => (value = option.id)}
+			/>
 			<div>
 				<p class="text-base font-medium text-gray-900">{option.label}</p>
 				{#if option.subLabel}

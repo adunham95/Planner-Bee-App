@@ -1,4 +1,7 @@
-export function formatCurrency(value: number) {
+export function formatCurrency(value: number | string) {
+	if (typeof value === 'string') {
+		value = parseInt(value);
+	}
 	if (value === 0) {
 		return 'Free';
 	}

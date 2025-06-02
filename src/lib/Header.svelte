@@ -1,5 +1,18 @@
 <script lang="ts">
+	import { onDestroy } from 'svelte';
+	import { cartStore, type Cart } from './stores/cart';
+
 	let mobileNabOpen = $state(false);
+	let cartStoreData: Cart | null = null;
+
+	const unsubscribe = cartStore.subscribe((t) => {
+		console.log(t);
+		cartStoreData = t;
+	});
+
+	onDestroy(() => {
+		unsubscribe();
+	});
 
 	interface route {
 		title: string;
@@ -168,7 +181,7 @@
 												/>
 											</svg>
 											<span class="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800"
-												>0</span
+												>{cartStoreData?.products.length || 0}</span
 											>
 											<span class="sr-only">items in cart, view bag</span>
 										</a>

@@ -5,15 +5,15 @@
 	import SidebarSection from '$lib/Display/SidebarSection.svelte';
 	import ECard from '$lib/ECard/ECard.svelte';
 	import ECardComponentEdit from '$lib/Form/ECardComponentEdit.svelte';
-	import EditECardTemplate from '$lib/Form/EditECardTemplate.svelte';
-	import ECardBox from '$lib/ShopSections/ECardBox.svelte';
+	import EditProduct from '$lib/Form/EditProduct.svelte';
+	import ProductCard from '$lib/ShopSections/ProductCard.svelte';
 	import { toastStore } from '$lib/stores/toast.js';
 
 	const { data } = $props();
 
 	$inspect(data);
 
-	const intialComponents = data.components.map((comp: { [key: string]: any }) => {
+	const intialComponents = (data.components || []).map((comp: { [key: string]: any }) => {
 		return {
 			id: comp.id,
 			value: {
@@ -28,17 +28,16 @@
 		};
 	});
 
-	let template = $state({
-		eCardID: data.eCard.id,
-		imageURL: data.eCard.imageURL,
-		name: data.eCard.name,
-		visible: data.eCard.visible,
-		premium: false,
-		sku: data.eCard.sku,
-		description: data.eCard.description,
-		cost: data.eCard.cost,
-		stripeProductID: data.eCard.stripeProductID,
-		stripePriceID: data.eCard.stripePriceID
+	let product = $state({
+		id: data.product.id,
+		name: data.product.name,
+		sku: data.product.sku,
+		imageURL: data.product.imageURL,
+		description: data.product.description,
+		visible: data.product.visible,
+		featured: data.product.featured,
+		price: data.product.price,
+		productType: 'eCard'
 	});
 
 	interface ComponentType {
@@ -68,10 +67,8 @@
 		});
 	});
 
-	async function saveECardTemplate() {
-		console.log('Save Template');
-
-		const url = `${PUBLIC_API_URL}/ecard-templates/${template.eCardID}`;
+	async function saveProduct() {
+		const url = `${PUBLIC_API_URL}/product/${product.id}`;
 
 		try {
 			const res = await fetch(url, {
@@ -81,25 +78,20 @@
 					'Content-Type': 'application/json' // Set content type to JSON
 				},
 				body: JSON.stringify({
-					sku: template.sku,
-					name: template.name,
-					description: template.description,
-					cost: template.cost,
-					imageURL: template.imageURL,
-					visible: template.visible,
-					stripeProductID: template.stripeProductID,
-					stripePriceID: template.stripePriceID
+					sku: product.sku,
+					name: product.name,
+					description: product.description,
+					cost: product.price,
+					imageURL: product.imageURL,
+					visible: product.visible
 				})
 			});
 			const responseData = await res.json();
-			console.log({ responseData });
-			if (responseData.id) {
-				template.eCardID = responseData.id;
-				toastStore.show({ type: 'success', message: 'ECard Created successfully' });
-			}
 		} catch (error) {
 			toastStore.show({ type: 'error', message: 'Something went wrong' });
 		}
+
+		console.log(url);
 	}
 </script>
 
@@ -109,23 +101,14 @@
 			<div>
 				<SectionTitle title="Details" />
 			</div>
-			<EditECardTemplate onSave={saveECardTemplate} bind:data={template} />
+			<EditProduct onSave={saveProduct} bind:product />
 		{/snippet}
 		{#snippet content()}
 			<div>
 				<SectionTitle title="Details Preview" />
 			</div>
 			<div class="grid grid-cols-4">
-				<ECardBox
-					template={{
-						...template,
-						createdAt: new Date(),
-						updatedAt: new Date(),
-						id: '000',
-						includedOptions: [],
-						components: []
-					}}
-				/>
+				<ProductCard template={product} />
 			</div>
 		{/snippet}
 	</SidebarSection>
@@ -134,7 +117,7 @@
 			<div>
 				<SectionTitle title="ECard Elements" />
 			</div>
-			<ECardComponentEdit eCardID={template.eCardID} bind:components />
+			<ECardComponentEdit eCardID={data?.eCard?.id} bind:components />
 		{/snippet}
 		{#snippet content()}
 			<div>

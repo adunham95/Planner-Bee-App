@@ -29,13 +29,15 @@ interface Product {
 	sku: string;
 	name: string;
 	description: string;
-	price: number;
+	price: number | string;
 	createdAt?: Date;
 	updatedAt?: Date;
 	imageURL: string;
 	visible: boolean;
 	featured: boolean;
 	productType: string;
+	eCardTemplateSKU?: string;
+	eCardTemplate?: ECardTemplate;
 }
 
 interface FeaturedProduct {
