@@ -7,7 +7,9 @@
 	routes={[
 		{ title: 'Home', path: '/' },
 		{ title: 'Current Templates', path: '/admin' },
-		{ title: 'New Product', path: '/admin/products/new' }
+		{ title: 'New Product', path: '/admin/products/new' },
+		{ title: 'Stock', path: '/admin/stock' },
+		{ title: 'Orders', path: '/admin/orders' }
 	]}
 />
 

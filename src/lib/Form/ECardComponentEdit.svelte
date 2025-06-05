@@ -24,10 +24,11 @@
 
 	interface Props {
 		eCardID?: string | null;
+		partyBoxTemplateID?: string | null;
 		components: Component[];
 	}
 
-	let { eCardID, components = $bindable([]) }: Props = $props();
+	let { eCardID, partyBoxTemplateID, components = $bindable([]) }: Props = $props();
 
 	$inspect(components);
 	function generateID(length: number) {
@@ -35,11 +36,6 @@
 	}
 
 	async function addItem() {
-		if (!eCardID || eCardID === null) {
-			toastStore.show({ type: 'warning', message: 'No ECard ID' });
-			return;
-		}
-
 		const url = `${PUBLIC_API_URL}/ecard-components`;
 
 		const res = await fetch(url, {
@@ -49,7 +45,8 @@
 				'Content-Type': 'application/json' // Set content type to JSON
 			},
 			body: JSON.stringify({
-				ecardID: eCardID,
+				eCardID,
+				partyBoxTemplateID,
 				key: generateID(6),
 				ecardComponentID: 'title',
 				editable: false
