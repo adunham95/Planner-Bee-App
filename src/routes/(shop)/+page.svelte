@@ -16,15 +16,15 @@
 	imageURL="/images/pexels-karolina-grabowska-5473156.jpg"
 />
 
-<FeauturesProducts products={data.products} href="/shop/ecard" />
+<!-- <FeauturesProducts products={data.products} href="/shop/ecard" /> -->
 
 <!-- <CategorySections categories={data.categories} /> -->
 
-<HowItWorks />
+<!-- <HowItWorks /> -->
 
 <Promo
 	headline="Sign Up to Bee a Member"
 	cta="Join The BeeHive"
-	description="Access Premium cards, additional features, and automates sends"
+	description="Access to larger groups, customization and automation"
 	imgURL="/images/pexels-sn-che-3918651-12391587.jpg"
 />

@@ -48,7 +48,7 @@
 		Create your account
 	</h2>
 	<TextInput id="firstname" label="First Name" autocomplete="given-name" bind:value={firstName} />
-	<TextInput id="lastname" label="Last Name" autocomplete="family-name" bind:value={firstName} />
+	<TextInput id="lastname" label="Last Name" autocomplete="family-name" bind:value={lastName} />
 
 	<!-- TODO Change to components -->
 	<div>

@@ -19,29 +19,15 @@
 			<div class="w-full grid grid-cols-1 gap-8 lg:grid-cols-3">
 				{@render subscriptionCard(
 					'WorkerBee Member',
-					'Perfect for sending occasional eCards',
-					['A la cart eCards', 'Send via text, email, or shareable link'],
+					'Perfect for small groups',
+					['3 or Less Invites', 'Shareable link only'],
 					0
 				)}
 				{@render subscriptionCard(
 					'BumbleBee Member',
-					'For busy bees who send often and want more privacy',
-					[
-						'No eCard expiration dates',
-						'Private & password-protected eCards',
-						'All eCards are free to use'
-					],
-					699
-				)}
-				{@render subscriptionCard(
-					'VIBee Member',
-					'For power users who want it all',
-					[
-						'Create with custom templates',
-						'Access advanced editing tools',
-						'Free access to FlightPlan — our subscription management service'
-					],
-					1699
+					'For the busy bees and large groups',
+					['Unlimited Sized Groups', 'Email, Text and Shareable Links', 'Customization'],
+					499
 				)}
 			</div>
 		</div>

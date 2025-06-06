@@ -45,10 +45,7 @@
 	<Select
 		id="productType"
 		label="Product Type"
-		options={[
-			{ id: 'ecard', label: 'ECard' },
-			{ id: 'party-box', label: 'Party Box' }
-		]}
+		options={[{ id: 'ecard', label: 'ECard' }]}
 		bind:value={product.productType}
 	/>
 	<TextInput id="price" label="Price" bind:value={product.price} />

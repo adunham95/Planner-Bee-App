@@ -24,11 +24,10 @@
 
 	interface Props {
 		eCardID?: string | null;
-		partyBoxTemplateID?: string | null;
 		components: Component[];
 	}
 
-	let { eCardID, partyBoxTemplateID, components = $bindable([]) }: Props = $props();
+	let { eCardID, components = $bindable([]) }: Props = $props();
 
 	$inspect(components);
 	function generateID(length: number) {
@@ -46,7 +45,6 @@
 			},
 			body: JSON.stringify({
 				eCardID,
-				partyBoxTemplateID,
 				key: generateID(6),
 				ecardComponentID: 'title',
 				editable: false

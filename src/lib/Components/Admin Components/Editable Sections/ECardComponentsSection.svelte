@@ -6,12 +6,11 @@
 	import type { ECardComponent } from '../../../../app';
 
 	interface Props {
-		partyBoxTemplateID?: string | null;
 		eCardID?: string | null;
 		eCardComponents: ECardComponent[];
 	}
 
-	const { partyBoxTemplateID, eCardID, eCardComponents }: Props = $props();
+	const { eCardID, eCardComponents }: Props = $props();
 
 	const intialComponents = (eCardComponents || []).map((comp: { [key: string]: any }) => {
 		return {
@@ -61,7 +60,7 @@
 		<div>
 			<SectionTitle title="ECard Elements" />
 		</div>
-		<ECardComponentEdit {partyBoxTemplateID} {eCardID} bind:components />
+		<ECardComponentEdit {eCardID} bind:components />
 	{/snippet}
 	{#snippet content()}
 		<div>

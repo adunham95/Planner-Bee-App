@@ -10,10 +10,10 @@
 
 	interface Props {
 		initialProduct?: Product;
-		productType?: 'party-box' | 'ecard';
+		productType?: 'ecard';
 	}
 
-	const { initialProduct, productType = 'party-box' }: Props = $props();
+	const { initialProduct, productType = 'ecard' }: Props = $props();
 
 	let product = $state({
 		id: initialProduct?.id || '',

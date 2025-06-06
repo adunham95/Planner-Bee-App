@@ -22,11 +22,10 @@
 	const companyName = 'Planner Bee';
 
 	const routes: route[] = [
-		{ title: 'ECards', path: '/shop/ecard' },
-		{ title: 'Party Boxes', path: '/shop/party-boxes' },
-		{ title: 'BeeHive', path: '/beehive' },
-		{ title: 'FlightPlan', path: '/flightplan' },
-		{ title: 'Roadmap', path: '/road-map' }
+		// { title: 'ECards', path: '/shop/ecard' },
+		{ title: 'BeeHive', path: '/beehive' }
+		// { title: 'FlightPlan', path: '/flightplan' },
+		// { title: 'Roadmap', path: '/road-map' }
 	];
 	const profileRoutes: route[] = [];
 </script>
@@ -161,7 +160,7 @@
 										</div>
 									</div>
 
-									<span class="mx-4 h-6 w-px bg-gray-200 lg:mx-6" aria-hidden="true"></span>
+									<!-- <span class="mx-4 h-6 w-px bg-gray-200 lg:mx-6" aria-hidden="true"></span>
 
 									<div class="flow-root">
 										<a href="/shop/cart" class="group -m-2 flex items-center p-2">
@@ -185,7 +184,7 @@
 											>
 											<span class="sr-only">items in cart, view bag</span>
 										</a>
-									</div>
+									</div> -->
 								</div>
 							</div>
 						</div>
